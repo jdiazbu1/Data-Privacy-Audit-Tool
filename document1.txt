@@ -1,1 +1,28 @@
+--- Health Insurance Claim Form (CMS 1500)---
+Health Insurance Claim #: HIC-047-485-243
+Date: 04/14/2026
 
+--- Patient Information ---
+Patient’s Full Name: John S. Doe
+Patient’s DOB: 07/08/1994
+Patient’s Sex: Male
+Patient's SSN: 348-230-9429
+Patient’s Address: 30454 Super Cool St.
+City: College Park
+State: MD
+ZIP Code: 20742
+Phone Number: 301-764-8743
+
+--- Insurance Information ---
+Insurance Type: Medicare
+Insurance #: M-193-845-4983
+
+--- Details ---
+Date of Incident: 03/12/2025
+Location: College Park, MD
+Description: Doe's vehicle was involved in a hit-and-run
+
+--- Billing Information ---
+Credit Card #: 3297-2397-6237-6723
+Credit Card Security Code: 209
+Billing Address: 30454 Super Cool St., College Park, MD 20742
