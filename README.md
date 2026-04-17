@@ -1,4 +1,4 @@
-# INST326---Final-Project-Data-Privacy-Audit-Tool
+# INST326: Data Privacy Audit Tool
 Data Privacy Audit Tool that scans documents for personally identifiable information (PII), assesses risk levels, and generates detailed reports. It also suggests and applies data protection methods, like masking or encryption, while producing a cleaned version of the file and a change log to help organizations safeguard sensitive data efficiently.
 ----
 ## Files
