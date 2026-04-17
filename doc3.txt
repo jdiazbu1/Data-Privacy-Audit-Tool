@@ -1,0 +1,15 @@
+--- McDonalds Dinner Reservation ---
+
+-- Guest Information --
+Reservee: Michael Jackson
+Reservee's Phone: 489-284-2849
+
+-- Reservation Information --
+Party Size: 6
+Date: 04/16/2026
+Dinner Time: 07:30 PM
+Seating Preference: Outdoors
+
+-- Notes --
+Special Notes: I will moonwalk.
+Any allergies? No

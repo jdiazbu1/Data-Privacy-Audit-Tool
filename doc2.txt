@@ -1,0 +1,21 @@
+--- Job Application for University of Maryland Police Department ---
+
+-- Position Information --
+Position: Information Technology Specialist
+Start Date: Fall 2026
+Base Pay: 30/hr
+
+-- Applicant Information --
+Applicant Name: Ice Spice
+Applicant Email: icespice@gmail.com
+Application Phone: 301-293-8203
+DOB: 01/31/1760
+Education: University of Maryland
+Highest Level of Education: Bachelor of Science
+Degree: Information Science
+Graduation Year: 2025
+
+-- Relevant Experience --
+Position 1: IT Intern - GDIT
+Position 2: Technology Consultant - EY
+Position 3: Help Desk - University of Maryland
