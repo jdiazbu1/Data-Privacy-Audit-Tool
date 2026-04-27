@@ -101,3 +101,151 @@ if __name__ == "__main__":
 
 
 ## PART 2: Risk Assessment
+
+# PII point values — higher = more sensitive
+PII_POINTS = {
+    "Email":       2,
+    "Phone":       3,
+    "SSN":        10,
+    "Credit Card": 10,
+    "DOB":         5,
+    "Address":     4,
+    "Name":        1,
+}
+
+# Score thresholds
+THRESHOLDS = {
+    "LOW":    (0,  9),
+    "MEDIUM": (10, 24),
+    "HIGH":   (25, float("inf")),
+}
+
+# Remediation suggestions per PII type
+SUGGESTIONS = {
+    "SSN":         "Redact or replace SSNs with an internal identifier.",
+    "Credit Card": "Redact or tokenize credit card numbers.",
+    "DOB":         "Mask or remove dates of birth.",
+    "Address":     "Remove or generalize physical addresses.",
+    "Phone":       "Redact or mask phone numbers.",
+    "Email":       "Anonymize or remove email addresses.",
+    "Name":        "Replace names with pseudonyms or initials.",
+}
+
+
+def score_results(results):
+    """Computes total risk score and per-type breakdown from detected PII.
+
+    Args:
+        results: List of dicts from Detector.detect(), each with 'type', 'value', 'line'.
+
+    Returns:
+        tuple: (total_score: int, breakdown: dict mapping PII type to cumulative points)
+    """
+    breakdown = {}
+    for item in results:
+        pii_type = item["type"]
+        pts = PII_POINTS.get(pii_type, 0)
+        breakdown[pii_type] = breakdown.get(pii_type, 0) + pts
+    return sum(breakdown.values()), breakdown
+
+
+def classify_risk(score):
+    """Maps a numeric score to a risk level label.
+
+    Args:
+        score: Non-negative integer risk score.
+
+    Returns:
+        str: "LOW", "MEDIUM", or "HIGH".
+
+    Raises:
+        ValueError: If score is negative.
+    """
+    if score < 0:
+        raise ValueError(f"Score cannot be negative, got {score}.")
+    for level, (lo, hi) in THRESHOLDS.items():
+        if lo <= score <= hi:
+            return level
+    return "HIGH"
+
+
+def get_suggestions(results, risk_level):
+    """Returns remediation suggestions based on detected PII types.
+
+    Args:
+        results:    List of dicts from Detector.detect().
+        risk_level: "LOW", "MEDIUM", or "HIGH".
+
+    Returns:
+        list: Suggestion strings, ordered by severity. Empty if no PII found.
+    """
+    if not results:
+        return []
+    detected = sorted(set(r["type"] for r in results),
+                      key=lambda t: -PII_POINTS.get(t, 0))
+    suggestions = [SUGGESTIONS[t] for t in detected if t in SUGGESTIONS]
+    if risk_level == "HIGH":
+        suggestions.append("Encrypt this file with a strong password (AES-256) and restrict access.")
+    elif risk_level == "MEDIUM":
+        suggestions.append("Consider applying access controls to limit who can view this document.")
+    return suggestions
+
+
+def assess_risk(results):
+    """Runs a full risk assessment on PII detection results.
+
+    Args:
+        results: List of dicts from Detector.detect().
+
+    Returns:
+        dict: Contains 'risk_level', 'total_score', 'breakdown', and 'suggestions'.
+
+    Raises:
+        TypeError: If results is not a list.
+    """
+    if not isinstance(results, list):
+        raise TypeError(f"Expected a list, got {type(results).__name__!r}.")
+    total, breakdown = score_results(results)
+    level = classify_risk(total)
+    return {
+        "risk_level":  level,
+        "total_score": total,
+        "breakdown":   breakdown,
+        "suggestions": get_suggestions(results, level),
+    }
+
+
+if __name__ == "__main__":
+    file_path = input("Enter path to .txt file: \n")
+    if not file_path:
+        print("No file path was provided.")
+        exit()
+    try:
+        lines = read_file(file_path)
+        detector = Detector()
+        results = detector.detect(lines)
+
+        report = assess_risk(results)
+        level = report["risk_level"]
+        score = report["total_score"]
+
+        print(f"\n--- Risk Assessment for {file_path} ---")
+        print(f"Risk Level : {level}")
+        print(f"Total Score: {score}")
+
+        if report["breakdown"]:
+            print("\nBreakdown:")
+            for pii_type, pts in sorted(report["breakdown"].items(), key=lambda x: -x[1]):
+                count = sum(1 for r in results if r["type"] == pii_type)
+                print(f"  {pii_type:<12} {count} match(es) x {PII_POINTS[pii_type]} pts = {pts} pts")
+
+        if report["suggestions"]:
+            print("\nSuggestions:")
+            for i, s in enumerate(report["suggestions"], 1):
+                print(f"  {i}. {s}")
+
+        if not results:
+            print("No PII detected.")
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
