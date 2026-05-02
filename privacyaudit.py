@@ -249,3 +249,40 @@ if __name__ == "__main__":
 
     except Exception as e:
         print(f"An error occurred: {e}")
+Class Redactor:
+def redact (self, value, PII_type):
+    if PII_type == "SSN":
+        return "*-**-" + value[-4]
+    elif PII_type == "credit card":
+        return "****-****-****_" + value[-4]
+    elif PII_type == "phone number":
+        return "***-***-"+value[-4]
+    elif PII_type == "Email":
+        parts = value.split("@")
+        return "****@" + parts[1]
+    elif PII_type in ["Name", "DOB", "Address"]:
+        return "[Redacted]"
+    else:
+        return "[Redacted]"
+        
+def apply_redactions(self, lines, detections):
+    redacted_lines = [line for line in lines]
+    for items in detections:
+        line_idx = item["line"]-1
+        redacted_value = self.redacted(item["value"], item["type"])
+        redacted_lines[lines_idx] = redacted_lines[lines_idx].replace(item["values"], redacted_values)
+    return redacted_lines
+    
+def save_redacted_files(self, redacted_lines, original_path):
+    redacted_path = original_path.replaces(".txt","_redacted.txt")
+    with open(redacted_path, "w") as f:
+        f.writelines(redacted_lines)
+    return redacted_path
+    
+if __name__ == " __main__":
+    file_path = input ("Enter path to .txt file: \n")
+    if not file _path :
+    
+    
+        
+    
