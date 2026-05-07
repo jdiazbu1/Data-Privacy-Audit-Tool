@@ -1,7 +1,7 @@
 --- McDonalds Dinner Reservation ---
 
 -- Guest Information --
-Reservee: Michael Jackson
+Reservee Name: Michael Jackson
 Reservee's Phone: 489-284-2849
 
 -- Reservation Information --
