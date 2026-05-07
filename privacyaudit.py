@@ -5,10 +5,6 @@ Authors: Jeymy Diaz, Steve Donfack, Adam Marchello, Rugiatu R. Tarawally
 
 File Created: 14 April, 2026
 
-Challenges Encountered:
-    - Jeymy: The biggest issue I  encountered in Part 1 with the regex patterns is the amount of false positives for 'Name'. There
-    are so many regex patterns available online, so I will continue looking for regex patterns that can help reduce the amount of
-    false positives our program detects.
 """
 
 ## PART 1: PII Detection
@@ -380,9 +376,3 @@ def main():
         print(f"An error occured:{e}")
 if __name__ == "__main__":
     main()
-
-    
-    
-    
-        
-    
