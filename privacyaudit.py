@@ -26,8 +26,8 @@ class Detector:
             "SSN": r"\d{3}-\d{2}-\d{4}",
             "Credit Card": r"\d{4}[- ]?\d{4}[- ]?\d{4}[- ]?\d{4}",
             "DOB": r"\d{2}/\d{2}/\d{4}",
-            #"Name": r"\b[A-Z][a-z]+(?: [A-Z]\.)? [A-Z][a-z]+\b",   # temporarily removing this while I look for better regex patterns!!!
-            "Address": r'\d+\s+[\w\s\.]+,\s*[\w\s]+,?\s*[A-Z]{2},?\s*\d{5}'
+            "Address": r'\d+\s+[\w\s\.]+,\s*[\w\s]+,?\s*[A-Z]{2},?\s*\d{5}',
+            "Name": r"Name:\s*([A-Z][a-z]+(?:\s[A-Z][a-z]+)+)"
         }
 
     def detect(self, lines):
