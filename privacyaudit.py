@@ -73,29 +73,6 @@ def read_file(file_path):
     chosen_file.close()
     return lines
 
-# If__name_ == "__main__": block
-if False:
-    file_path = input("Enter path to .txt file: \n")
-    if not file_path:
-        print("No file path was provided.")
-        exit()
-    try:
-        lines = read_file(file_path)
-        detector = Detector()
-        results = detector.detect(lines)
-        if not results:
-            print(f"No PII was detected in {file_path}")
-        else:
-            print(f"Detected PII in {file_path}:")
-            for item in results:
-                pii_type = item['type']
-                value = item['value']
-                line = item['line']          
-                print(f"{pii_type} found: {value} (Line {line})")
-    except Exception:
-        print("Oh no! An error occurred. :(")
-
-
 ## PART 2: Risk Assessment
 
 # PII point values — higher = more sensitive
@@ -245,7 +222,9 @@ if False:
 
     except Exception as e:
         print(f"An error occurred: {e}")
-        
+
+## PART 3: Redaction Logic
+
 class Redactor:
     def redact (self, value, pii_type):
         if pii_type == "SSN":
@@ -282,7 +261,8 @@ class Redactor:
            f.writelines(redacted_lines)    
        return redacted_path
     
-# Part 4: Reporting
+## PART 4: Reporting
+
 def gen_report(file_path, results, risk_report, redacted_path=None):
         """
         generates the actual report as a file for the audit 
@@ -292,7 +272,7 @@ def gen_report(file_path, results, risk_report, redacted_path=None):
         Args:
             file_path(str): path to og file
             results(list): PII results
-            risk_report: output from the assesed risk
+            risk_report: output from the assessed risk
             redacted_path: path of redacted file
 
         Returns:
@@ -373,6 +353,6 @@ def main():
         report_path = gen_report(file_path, results, risk_report, redacted_path)
         print(f"\n report saved : {redacted_path}")
     except Exception as e:
-        print(f"An error occured:{e}")
+        print(f"An error occurred:{e}")
 if __name__ == "__main__":
     main()
