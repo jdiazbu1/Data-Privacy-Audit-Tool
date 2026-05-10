@@ -251,7 +251,7 @@ class Redactor:
         if pii_type == "SSN":
             return "***_**_" + value[-4:]
         elif pii_type == "Credit Card":
-            return "****-****-****-" + value[-4]
+            return "****-****-****-" + value[-4:]
         elif pii_type == "Phone":
             return "***-***-"+value[-4:]
         elif pii_type == "Email":
