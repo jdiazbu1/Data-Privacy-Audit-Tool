@@ -169,42 +169,6 @@ def assess_risk(results):
         "suggestions": get_suggestions(results, level),
     }
 
-
-if False:
-    file_path = input("Enter path to .txt file: \n")
-    if not file_path:
-        print("No file path was provided.")
-        exit()
-    try:
-        lines = read_file(file_path)
-        detector = Detector()
-        results = detector.detect(lines)
-
-        report = assess_risk(results)
-        level = report["risk_level"]
-        score = report["total_score"]
-
-        print(f"\n--- Risk Assessment for {file_path} ---")
-        print(f"Risk Level : {level}")
-        print(f"Total Score: {score}")
-
-        if report["breakdown"]:
-            print("\nBreakdown:")
-            for pii_type, pts in sorted(report["breakdown"].items(), key=lambda x: -x[1]):
-                count = sum(1 for r in results if r["type"] == pii_type)
-                print(f"  {pii_type:<12} {count} match(es) x {PII_POINTS[pii_type]} pts = {pts} pts")
-
-        if report["suggestions"]:
-            print("\nSuggestions:")
-            for i, s in enumerate(report["suggestions"], 1):
-                print(f"  {i}. {s}")
-
-        if not results:
-            print("No PII detected.")
-
-    except Exception as e:
-        print(f"An error occurred: {e}")
-
 ## PART 3: Redaction Logic
 
 class Redactor:
@@ -273,7 +237,7 @@ def gen_report(file_path, results, risk_report, redacted_path=None):
             report.write(f"Total Risk Score: {risk_report['total_score']}")
             report.write("\n")
             report.write("\n")
-            report.write("PII found: \n")
+            report.write("PII Found: \n")
             if results:
                 for item in results:
                     report.write(f"- {item['type']} found on line {item['line']}: {item['value']}\n")
@@ -309,31 +273,31 @@ def main():
         risk_report = assess_risk(results)
 
         #summary display
-        print("\n Privacy Audit Results")
-        print(f"risk Level: {risk_report['risk_level']}")
-        print(f"total Score: {risk_report['total_score']}")
+        print("\nPrivacy Audit Results")
+        print(f"Risk Level: {risk_report['risk_level']}")
+        print(f"Total Score: {risk_report['total_score']}")
         if results:
-            print("\n PII found")
+            print("\nPII Found:")
             for item in results:
-                print(f"{item['type']} found: {item['value']} (Line {item['line']})")
+                print(f"{item['type']} Found: {item['value']} (Line {item['line']})")
         else:
-            print("\n no PII was found")
+            print("\nNo PII was found")
         if risk_report["suggestions"]:
-            print("\n suggestions:")
+            print("\nSuggestions:")
             for suggestion in risk_report['suggestions']:
-                print(f" {suggestion}")
+                print(f"{suggestion}")
         redacted_path = None # help with var error
 
         if results:
-            choice = input("create redacted copy? yes or no: ").lower()
+            choice = input("\nCreate redacted copy? yes or no: ").lower()
             if choice == 'yes':
                 redactor =Redactor()
                 redacted_lines = redactor.apply_redactions(lines, results)
                 redacted_path = redactor.save_redacted_file(redacted_lines, file_path)
-                print(f"\n redacted file saved to : {redacted_path}")
+                print(f"\nRedacted file saved to: {redacted_path}")
 
         report_path = gen_report(file_path, results, risk_report, redacted_path)
-        print(f"\n report saved : {redacted_path}")
+        print(f"\nReport saved to: {report_path}")
     except Exception as e:
         print(f"An error occurred:{e}")
 if __name__ == "__main__":
