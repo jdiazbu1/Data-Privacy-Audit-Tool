@@ -5,6 +5,21 @@ Authors: Jeymy Diaz, Steve Donfack, Adam Marchello, Rugiatu R. Tarawally
 
 File Created: 14 April, 2026
 
+Challenges Encountered: 
+The biggest challenge encountered in this project was finding an effective way to detect PII.
+We decided to use Regex patterns, but found that this often limited our ability to find PII that was available in
+different formats. This limited the application of our program in terms of being able to apply it to messy, real-world
+data. Based on the feedback we recieved on Check-In 2, I attempted to flag for numbers/read the text around it to find any 
+clues for PII, but had trouble implementing it into this code as it was flagging an excessive amount of false positives. 
+
+The amount of false positives was another issue we encountered. It was difficult trying to find a regex pattern that 
+effectively flagged names, thus making me simply tailor the pattern to one that was narrow ("Name:") to limit the 
+amount of false positives we were getting. Another issue was DOB, as any date within a document, even if it was not a DOB, 
+was being flagged as a DOB, thus the program flagging it as PII. 
+
+Overall, while our program runs effectively and provides the user with information about the PII available through a 
+report and a redacted file, we believe that our program could be even more useful in a real-world application through
+an improved way of detecting PII. - Jeymy
 """
 
 ## PART 1: PII Detection
@@ -14,6 +29,11 @@ import re
 
 class Detector:
     def __init__(self):
+        """Initializes regex patterns for detecting PII.
+
+        Attributes:
+            pii (dict): Assigns PII type names to regex patterns.
+        """
         self.pii = {
             "Email":r"\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b",
             "Phone":r"\b\d{3}[-.\s]?\d{3}[-.\s]?\d{4}\b",
@@ -25,6 +45,19 @@ class Detector:
         }
 
     def detect(self, lines):
+        """Scans a list of lines.
+        
+        Iterates through each line and applies all regex patterns in self.pii to identify PII.
+
+        Args:
+            lines (str): Input split into lines.
+
+        Returns:
+            list of dict: List of detected PII:
+                - "type" (str): Category of PII detected
+                - "value" (str): Matched PII string from the text
+                - "line" (int): Line # where the PII was found.
+        """
         results = []
         for line_number, line in enumerate(lines, start=1):
             for pii_type, pattern in self.pii.items():
@@ -173,6 +206,15 @@ def assess_risk(results):
 
 class Redactor:
     def redact (self, value, pii_type):
+        """Redacts detected PII value based on its type.
+
+        Args:
+            value (str): The detected PII value.
+            pii_type (str): The category of PII.
+
+        Returns:
+            str: redacted version of the value.
+        """
         if pii_type == "SSN":
             return "***-**-" + value[-4:]
         elif pii_type == "Credit Card":
@@ -190,6 +232,15 @@ class Redactor:
             return "[Redacted]"
             
     def apply_redactions(self, lines, detections):
+        """Applies redactions to PII in text lines.
+
+        Args:
+            lines (list): Original lines in the file.
+            detections (list): List of detection from Detector.detect().
+
+        Returns:
+            list: Lines with PII values redacted.
+        """
         redacted_lines = lines.copy()
         
         for item in detections:
@@ -202,6 +253,15 @@ class Redactor:
         return redacted_lines
         
     def save_redacted_file(self, redacted_lines, original_path):
+       """Writes redacted content to a new file.
+
+        Args:
+            redacted_lines (list): Lines after redaction.
+            original_path (str): Path to original file.
+
+        Returns:
+            str: Path to the newly created redacted file.
+        """
        redacted_path = original_path.replace(".txt","_redacted.txt")
        with open(redacted_path, "w") as f:
            f.writelines(redacted_lines)    
