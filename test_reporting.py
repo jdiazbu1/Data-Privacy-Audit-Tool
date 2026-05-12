@@ -44,7 +44,7 @@ def test_gen_contents():
     report_path = gen_report(file_path, results, risk_report)
     with open(report_path, "r") as file:
         report_contents = file.read()
-    assert "risk level: LOW" in report_contents
+    assert "Risk Level: LOW" in report_contents
     assert "Phone" in report_contents
     assert "Redact or mask phone numbers." in report_contents
 
@@ -68,7 +68,7 @@ def test_gen_no_pii():
     with open(report_path, "r") as file:
         report_contents = file.read()
     #ensure no data is found
-    assert "no PII found" in report_contents
-    assert "no risk points were assigned" in report_contents
-    assert "no suggestions needed" in report_contents
+    assert "No PII Found" in report_contents
+    assert "No risk points were assigned" in report_contents
+    assert "No Suggestions Needed" in report_contents
     os.remove(report_path)
