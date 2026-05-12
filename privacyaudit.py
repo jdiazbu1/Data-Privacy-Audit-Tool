@@ -210,7 +210,7 @@ if False:
 class Redactor:
     def redact (self, value, pii_type):
         if pii_type == "SSN":
-            return "***_**_" + value[-4:]
+            return "***-**-" + value[-4:]
         elif pii_type == "Credit Card":
             return "****-****-****-" + value[-4:]
         elif pii_type == "Phone":
