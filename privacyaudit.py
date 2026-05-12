@@ -9,50 +9,32 @@ File Created: 14 April, 2026
 
 ## PART 1: PII Detection
 
-# Import Regex module. 
+# Create Detector class.
 import re
 
-# Create Detector class.
 class Detector:
-    """ Detects PII in .txt file using regex patterns.
-
-    Attributes: 
-        pii: A dict matches PII type to associated regex patterns. 
-    """
     def __init__(self):
         self.pii = {
-            "Email": r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}",
-            "Phone": r"\d{3}[-.]?\d{3}[-.]?\d{4}",
-            "SSN": r"\d{3}-\d{2}-\d{4}",
-            "Credit Card": r"\d{4}[- ]?\d{4}[- ]?\d{4}[- ]?\d{4}",
-            "DOB": r"\d{2}/\d{2}/\d{4}",
-            "Address": r'\d+\s+[\w\s\.]+,\s*[\w\s]+,?\s*[A-Z]{2},?\s*\d{5}',
+            "Email":r"\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b",
+            "Phone":r"\b\d{3}[-.\s]?\d{3}[-.\s]?\d{4}\b",
+            "SSN":r"\b\d{3}-\d{2}-\d{4}\b",
+            "Credit Card":r"\b(?:\d{4}[-\s]?){3}\d{4}\b(?!\d)",
+            "DOB":r"\b\d{2}[/.\-]\d{2}[/.\-]\d{4}\b",
+            "Address":r"\d+\s+[\w\s\.]+,\s*[\w\s]+,?\s*[A-Z]{2},?\s*\d{5}", 
             "Name": r"Name:\s*([A-Z][a-z]+(?:\s[A-Z][a-z]+)+)"
         }
 
     def detect(self, lines):
-        """Scans lines within .txt for PII. Returns list of all matches and identifies line number.
-        
-        Args:
-            lines: List of strings where each string is a line of text that was scanned.
-
-        Returns:
-            list: Contains 'type', 'value', and 'line'.
-        """
         results = []
-        line_number = 1
-        for line in lines:
-            for pii_type in self.pii:
-                pattern = self.pii[pii_type]
+        for line_number, line in enumerate(lines, start=1):
+            for pii_type, pattern in self.pii.items():
                 matches = re.findall(pattern, line)
-                if matches:
-                    for match in matches:
-                        results.append({
-                            "type": pii_type,
-                            "value": match,
-                            "line": line_number
-                        })
-            line_number += 1
+                for match in matches:
+                    results.append({
+                        "type":  pii_type,
+                        "value": match,
+                        "line":  line_number
+                    })
         return results
 
 # Read .txt file. 

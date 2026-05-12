@@ -5,6 +5,8 @@ Data Privacy Audit Tool that scans documents for personally identifiable informa
 ### privacyaudit.py
 - This is where our group will develop our tool. This will contain four main parts:
   - PII Detector
+    - Regex patterns
+    - Context-based detection
   - Risk Assessment
   - Redaction Logic
   - Reporting + Integration
@@ -19,3 +21,5 @@ Data Privacy Audit Tool that scans documents for personally identifiable informa
 - doc3.txt
   - This is a fake Dinner Reservation. This .txt file is intentionally creted to be flagged as a "Low Risk" document.
     - PII: Name, Phone
+- doc4.txt
+  - This is a messy document. This .txt file is intentionally created to not be detected using regex patterns, but rather through context-based detection. The PII in this document does not follow the standard format, e.g. "my card number is 8493936501984785"

@@ -74,7 +74,7 @@ def test_detect_name():
 def test_detect_multiple_pii():
     """tests detection when multiple PII exist."""
     lines = [
-        "Name: John Mayer",
+        "Name: Jerry Mayer",
         "Email: johnmayer@outlook.com",
         "Phone: 301-102-3932"
     ]
