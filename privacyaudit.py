@@ -262,36 +262,36 @@ def gen_report(file_path, results, risk_report, redacted_path=None):
         """
         report_path =file_path.replace(".txt", "_report.txt")
         with open(report_path, "w") as report:
-            report.write("data privacy audit report \n")
+            report.write("Data Privacy Audit Report \n")
             report.write("\n")
             report.write(f"Original File: {file_path}\n")
 
             if redacted_path:
-                report.write(f"redacted file: {redacted_path}\n") #include if created
-            report.write(f"risk level: {risk_report['risk_level']}")
+                report.write(f"Redacted file: {redacted_path}\n") #include if created
+            report.write(f"Risk Level: {risk_report['risk_level']}")
             report.write("\n")
-            report.write(f"total risk score: {risk_report['total_score']}")
+            report.write(f"Total Risk Score: {risk_report['total_score']}")
             report.write("\n")
             report.write("\n")
             report.write("PII found: \n")
             if results:
                 for item in results:
-                    report.write(f"- {item['type']} found on {item['line']}: {item['value']}\n")
+                    report.write(f"- {item['type']} found on line {item['line']}: {item['value']}\n")
             else:
-                report.write("no PII found \n")
+                report.write("No PII Found \n")
             
-            report.write("\nrisk breakdown:\n")
+            report.write("\nRisk Breakdown:\n")
             if risk_report['breakdown']:
                 for pii_type, points in risk_report["breakdown"].items():
                     report.write(f"{pii_type}: {points} points\n")
             else:
-                report.write("no risk points were assigned\n")
-            report.write("\n suggested fixes")
+                report.write("No risk points were assigned\n")
+            report.write("\nSuggested Fixes: \n")
             if risk_report["suggestions"]:
                 for suggestion in risk_report["suggestions"]:
                     report.write(f"{suggestion}\n")
             else:
-                report.write("no suggestions needed")
+                report.write("No Suggestions Needed")
 
             return report_path
 
