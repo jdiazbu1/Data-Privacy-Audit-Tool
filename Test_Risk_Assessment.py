@@ -6,7 +6,7 @@ Unit tests for Part 2: Risk Assessment
 import pytest
 from privacyaudit import score_results, classify_risk, get_suggestions, assess_risk
  
-# Real PII detected from doc1.txt
+# PII detected from doc1.txt
 SAMPLE_RESULTS = [
     {"type": "SSN",         "value": "348-30-9429",        "line": 8},
     {"type": "Credit Card", "value": "3297-2397-6237-6723", "line": 22},
@@ -26,7 +26,7 @@ def test_score_results():
  
  
 def test_classify_risk():
-    # Score of 34 should be HIGH (threshold is 25+)
+    # 34 > 25 Score should be HIGH 
     assert classify_risk(34) == "HIGH"
  
  
